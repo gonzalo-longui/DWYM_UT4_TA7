@@ -1,10 +1,11 @@
+import './App.css';
+import { Card } from './components/card/card.jsx';
+import './components/card/card.module.css';
 import { useState } from 'react';
-import { CircleX } from 'lucide-react';
-import './App.css'
 
 function App() {
   const [tareas, setTareas] = useState([]);
-  const [nuevaTarea, setNuevaTarea] = useState("");
+  const [nuevaTarea, setNuevaTarea] = useState('');
 
   const addTarea = (e) => {
     e.preventDefault();
@@ -12,24 +13,28 @@ function App() {
       setTareas([...tareas, nuevaTarea]);
       setNuevaTarea('');
     }
-  }
+  };
 
   const eliminarTarea = (index) => {
-    setTareas(tareas.filter((_, i) => i !== index));
+    const nuevasTareas = tareas.filter((_, i) => i !== index);
+    setTareas(nuevasTareas);
   }
 
   return (
     <>
-      <form onSubmit={addTarea}>
-        <input type="text" className="taskInput" id="newTask" placeholder="Ingresa una tarea..." value={nuevaTarea} onChange={(e) => setNuevaTarea(e.target.value)}></input>
-        <button type="submit">Agregar</button>
-      </form>
-      <ul>
-        {tareas.map((tarea, index) => (
-          <li key={index} className="taskCard">{tarea}
-          <CircleX className="iconoEliminar" onClick={() => eliminarTarea(index)}/></li>
-        ))}
-      </ul>
+      <div>
+        <form onSubmit={addTarea}>
+          <input type="text" className="taskInput" id="taskInput" placeholder="Ingresa una tarea..." value={nuevaTarea} onChange={(e) => setNuevaTarea(e.target.value)}></input>
+          <button type="submit">Agregar</button>
+        </form>
+      </div>
+      <div>
+        <ul>
+          {tareas.map((tarea, index) => (
+            <Card key={index} tarea={tarea} eliminarTarea={() => eliminarTarea(index)}/>
+          ))}
+        </ul>
+      </div>
     </>
   )
 }
